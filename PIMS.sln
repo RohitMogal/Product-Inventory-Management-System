@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PIMS", "PIMS\PIMS.csproj", "{DD47C186-4B35-4260-9B8D-195DF4345FCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PIMS", "PIMS\PIMS.csproj", "{DD47C186-4B35-4260-9B8D-195DF4345FCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{1EE36FFC-9682-4999-8112-345583A62BB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesContract", "ServicesContract\ServicesContract.csproj", "{33C93E5E-CA6E-4234-A900-53D9639E9D71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{DD47C186-4B35-4260-9B8D-195DF4345FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD47C186-4B35-4260-9B8D-195DF4345FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD47C186-4B35-4260-9B8D-195DF4345FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EE36FFC-9682-4999-8112-345583A62BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EE36FFC-9682-4999-8112-345583A62BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EE36FFC-9682-4999-8112-345583A62BB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EE36FFC-9682-4999-8112-345583A62BB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C93E5E-CA6E-4234-A900-53D9639E9D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C93E5E-CA6E-4234-A900-53D9639E9D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C93E5E-CA6E-4234-A900-53D9639E9D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C93E5E-CA6E-4234-A900-53D9639E9D71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
