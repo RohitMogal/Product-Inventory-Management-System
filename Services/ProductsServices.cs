@@ -51,9 +51,22 @@ namespace Services
             return result;
         }
 
-        public Task<string> UpdateProduct(string productId)
+        public async Task<bool> UpdateProduct(ProductsModel updatedproducts)
         {
-            throw new NotImplementedException();
+            var product = await _myDBContext.Product.FindAsync(updatedproducts.ProductID);
+            if(product!=null) {
+
+                product.Price= updatedproducts.Price;
+                product.StockQuantity= updatedproducts.StockQuantity;
+                product.Name = updatedproducts.Name;
+                product.Category= updatedproducts.Category;
+
+                 _myDBContext.Product.Update(product);
+                await _myDBContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
       

@@ -54,12 +54,12 @@ namespace Assignment_1.Controllers
             }
         }
 
-        [HttpPost("delete")]
-        public async Task<IActionResult> DeleteProduct([FromBody] int Id)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteProduct([FromQuery] int productId)
         {
             try
             {
-                var result = await _products.DeleteProduct(Id);
+                var result = await _products.DeleteProduct(productId);
                 if (result)
                 {
                     return Ok("Product deleted successfully");
@@ -72,5 +72,24 @@ namespace Assignment_1.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateProduct([FromBody] ProductsModel product)
+        {
+            try
+            {
+                var result = await _products.UpdateProduct(product);
+                if (result)
+                {
+                    return Ok("Product updated successfully");
+                }
+                return NotFound("Product not found");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
     }
 }
