@@ -52,6 +52,7 @@ namespace Services
             else
             {
                 _myDBContext.Product.Remove(product);
+                await _myDBContext.SaveChangesAsync();
                 return true;
             }
         }
@@ -85,6 +86,7 @@ namespace Services
                 product.StockQuantity = updatedproducts.StockQuantity;
                 product.Name = updatedproducts.Name;
                 product.Category = updatedproducts.Category;
+                product.LastUpdatedDate = updatedproducts.LastUpdatedDate;
 
                 _myDBContext.Product.Update(product);
                 await _myDBContext.SaveChangesAsync();

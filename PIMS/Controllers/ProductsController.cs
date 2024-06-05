@@ -104,7 +104,7 @@ namespace Assignment_1.Controllers
         /// <param name="product">The model containing product details.</param>
         /// <returns>Returns the result of updating the product.</returns>
         
-        [HttpPut("update")]
+        [HttpPost("update")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductsModel product)
         {
             try
