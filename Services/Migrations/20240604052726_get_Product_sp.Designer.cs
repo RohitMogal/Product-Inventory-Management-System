@@ -11,8 +11,8 @@ using Services.Data;
 namespace Services.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    [Migration("20240603100203_Second migration")]
-    partial class Secondmigration
+    [Migration("20240604052726_get_Product_sp")]
+    partial class get_Product_sp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

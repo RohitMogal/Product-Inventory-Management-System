@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Services.Helper;
+using ServicesContract.Model;
 using ServicesContracts;
 using ServicesContracts.Model;
 using System;
@@ -10,10 +12,12 @@ namespace Assignment_1.Controllers
     public class ProductsController : Controller
     {
         private readonly IProducts _products;
+        private readonly ExportExcel _exportExcel;
 
-        public ProductsController(IProducts products)
+        public ProductsController(IProducts products, ExportExcel exportExcel)
         {
             _products = products;
+            _exportExcel = exportExcel;
         }
 
         [HttpGet("/")]
@@ -22,13 +26,20 @@ namespace Assignment_1.Controllers
             return "Hello World";
         }
 
+
+        /// <summary>
+        /// Endpoint to add a new product.
+        /// </summary>
+        /// <param name="product">The model containing product details.</param>
+        /// <returns>Returns the result of adding the product.</returns>
+       
         [HttpPost("add")]
         public async Task<IActionResult> AddProducts([FromBody] ProductsModel product)
         {
             try
             {
                 var result = await _products.AddProducts(product);
-                if (result > 0)
+                if (result)
                 {
                     return Ok("Product added");
                 }
@@ -40,6 +51,12 @@ namespace Assignment_1.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Endpoint to retrieve all products.
+        /// </summary>
+        /// <returns>Returns the list of all products.</returns>
+       
         [HttpGet("getall")]
         public async Task<IActionResult> GetProducts()
         {
@@ -54,6 +71,13 @@ namespace Assignment_1.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Endpoint to delete a product by ID.
+        /// </summary>
+        /// <param name="productId">The ID of the product to delete.</param>
+        /// <returns>Returns the result of deleting the product.</returns>
+        
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProduct([FromQuery] int productId)
         {
@@ -73,6 +97,13 @@ namespace Assignment_1.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Endpoint to update a product.
+        /// </summary>
+        /// <param name="product">The model containing product details.</param>
+        /// <returns>Returns the result of updating the product.</returns>
+        
         [HttpPut("update")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductsModel product)
         {
@@ -91,5 +122,31 @@ namespace Assignment_1.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Endpoint to create and download an Excel sheet of the database.
+        /// </summary>
+        /// <param name="excelExportModel">The model containing export parameters.</param>
+        /// <returns>Returns the exported Excel sheet.</returns>
+        
+        [HttpPost("createExcel")]
+        public async Task<IActionResult> CreateExcelFile([FromBody] ExcelExportModel excelExportModel)
+        {
+            try
+            {
+                var fileContentResult = await _exportExcel.ExportExcelHelper(excelExportModel);
+                if (fileContentResult != null)
+                {
+                    return fileContentResult;
+                }
+                return NotFound("No data available to export.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
     }
 }
+ 

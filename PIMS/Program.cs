@@ -1,6 +1,8 @@
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Data;
+using Services.Helper;
 using ServicesContracts;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MyDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionStrings")));
 builder.Services.AddScoped<IProducts, ProductsServices>();
+builder.Services.AddTransient<ExportExcel>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

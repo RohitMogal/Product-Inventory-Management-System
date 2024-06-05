@@ -11,8 +11,8 @@ using Services.Data;
 namespace Services.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    [Migration("20240603092913_Initial migration")]
-    partial class Initialmigration
+    [Migration("20240604093400_updateProduct_sp")]
+    partial class updateProduct_sp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,18 +39,20 @@ namespace Services.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(90)
+                        .HasColumnType("nvarchar(90)");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("ProductID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
                 });
 #pragma warning restore 612, 618
         }
