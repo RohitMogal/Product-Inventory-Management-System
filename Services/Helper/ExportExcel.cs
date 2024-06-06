@@ -51,11 +51,14 @@ namespace Services.Helper
                         wb.Worksheets.Add(ToConvertDataTable(data));
                         using (MemoryStream memoryStream = new MemoryStream())
                         {
+                            DateTime now = DateTime.Now;
+                            string fileName = $"ExcelExport_{now.ToString("yyyyMMdd_HHmmss")}.xlsx";
+
                             wb.SaveAs(memoryStream);
                             var content = memoryStream.ToArray();
                             return new FileContentResult(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                             {
-                                FileDownloadName = "ExcelExport.xlsx"
+                                FileDownloadName = fileName
                             };
                         }
                     }
@@ -64,7 +67,7 @@ namespace Services.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("This is a debug message: ", ex.Message);
+                _logger.LogError($"An error occured while transfering data from db to file: {ex.Message}");
                 throw;
             }
         }

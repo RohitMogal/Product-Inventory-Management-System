@@ -50,7 +50,7 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"This is a debug message: {ex.Message}");
+                _logger.LogError($"An error occured while creating product: {ex.Message}");
                 return StatusCode(500, $"Internal server error");
             }
         }
@@ -71,7 +71,7 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("This is a debug message: ",ex.Message);
+                _logger.LogError($"An error occured while getiing List of product: {ex.Message}");
                 return StatusCode(500, $"Internal server error");
             }
         }
@@ -97,7 +97,7 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("This is a debug message: ",ex.Message);
+                _logger.LogError($"An error occured while deleting product: {ex.Message}");
                 return StatusCode(500, $"Internal server error");
             }
         }
@@ -124,7 +124,7 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("This is a debug message: ",ex.Message);
+                _logger.LogError($"An error occured while updating product: {ex.Message}");
                 return StatusCode(500, $"Internal server error");
             }
         }
@@ -177,7 +177,7 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("This is a debug message: ",ex.Message);
+                _logger.LogError($"An error occured while creating excel file: {ex.Message}");
                 return StatusCode(500, $"Internal server error");
             }
         }

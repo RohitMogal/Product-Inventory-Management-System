@@ -1,101 +1,102 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Services.Data;
-using Services.Helper;
 using ServicesContracts;
 using ServicesContracts.Model;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Services
 {
     public class ProductsServices : IProducts
     {
         private readonly MyDBContext _myDBContext;
-        public ProductsServices(MyDBContext myDBContext)
+        private readonly ILogger<ProductsServices> _logger;
+
+        public ProductsServices(MyDBContext myDBContext, ILogger<ProductsServices> logger)
         {
             _myDBContext = myDBContext;
+            _logger = logger;
         }
 
-
-        /// <summary>
-        /// Service to add a product.
-        /// </summary>
-        /// <param name="products">The product model to add.</param>
-        /// <returns>Returns true if the product is added successfully.</returns>
-        
         public async Task<bool> AddProductsAsync(ProductsModel products)
         {
             try
             {
-
-                var res =await _myDBContext.AddProduct1Async(products);
-                var res1 = await _myDBContext.SaveChangesAsync();
-
+                await _myDBContext.AddProduct1Async(products);
+                await _myDBContext.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex) { throw ex; };
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while creating product: {ex.Message}");
+                throw;
+            }
         }
 
-
-        /// <summary>
-        /// Service to delete a product.
-        /// </summary>
-        /// <param name="productId">The ID of the product to delete.</param>
-        /// <returns>Returns true if the product is deleted successfully; otherwise, false.</returns>
-       
         public async Task<bool> DeleteProductAsync(int productId)
         {
-            var product = await _myDBContext.Product.FindAsync(productId);
-            if (product == null)
+            try
             {
-                return false;
+                var product = await _myDBContext.Product.FindAsync(productId);
+                if (product == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    _myDBContext.Product.Remove(product);
+                    await _myDBContext.SaveChangesAsync();
+                    return true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _myDBContext.Product.Remove(product);
-                await _myDBContext.SaveChangesAsync();
-                return true;
+                _logger.LogError($"An error occurred while deleting product: {ex.Message}");
+                throw;
             }
         }
 
-
-        /// <summary>
-        /// Service to get all products.
-        /// </summary>
-        /// <returns>Returns a list of all products.</returns>
-        
         public async Task<List<ProductsModel>> GetProductsAsync()
         {
-            List<ProductsModel> result =await _myDBContext.GetAllProducts1Async();
-            return result;
+            try
+            {
+                return await _myDBContext.GetAllProducts1Async();
+             
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while retrieving products: {ex.Message}");
+                throw;
+            }
         }
 
-
-        /// <summary>
-        /// Service to update a product.
-        /// </summary>
-        /// <param name="updatedproducts">The updated product model.</param>
-        /// <returns>Returns true if the product is updated successfully; otherwise, false.</returns>
-        
         public async Task<bool> UpdateProductAsync(ProductsModel updatedproducts)
         {
-            var product = await _myDBContext.Product.FindAsync(updatedproducts.ProductID);
-            if (product != null)
+            try
             {
+                var product = await _myDBContext.Product.FindAsync(updatedproducts.ProductID);
+                if (product != null)
+                {
+                    product.Price = updatedproducts.Price;
+                    product.StockQuantity = updatedproducts.StockQuantity;
+                    product.Name = updatedproducts.Name;
+                    product.Category = updatedproducts.Category;
+                    product.LastUpdatedDate = updatedproducts.LastUpdatedDate;
 
-                product.Price = updatedproducts.Price;
-                product.StockQuantity = updatedproducts.StockQuantity;
-                product.Name = updatedproducts.Name;
-                product.Category = updatedproducts.Category;
-                product.LastUpdatedDate = updatedproducts.LastUpdatedDate;
-
-                _myDBContext.Product.Update(product);
-                await _myDBContext.SaveChangesAsync();
-                return true;
+                    _myDBContext.Product.Update(product);
+                    await _myDBContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while updating product: {ex.Message}");
+                throw;
+            }
         }
-
-
     }
 }
