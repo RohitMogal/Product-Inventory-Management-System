@@ -104,7 +104,7 @@ namespace Assignment_1.Controllers
         /// <param name="product">The model containing product details.</param>
         /// <returns>Returns the result of updating the product.</returns>
         
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductsModel product)
         {
             try
@@ -129,7 +129,7 @@ namespace Assignment_1.Controllers
         /// <param name="excelExportModel">The model containing export parameters.</param>
         /// <returns>Returns the exported Excel sheet.</returns>
         
-        [HttpPut("createExcel")]
+        [HttpPost("createExcel")]
         public async Task<IActionResult> CreateExcelFile([FromBody] ExcelExportModel excelExportModel)
         {
             try
