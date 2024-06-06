@@ -129,7 +129,7 @@ namespace Assignment_1.Controllers
         /// <param name="excelExportModel">The model containing export parameters.</param>
         /// <returns>Returns the exported Excel sheet.</returns>
         
-        [HttpPost("createExcel")]
+        [HttpPut("createExcel")]
         public async Task<IActionResult> CreateExcelFile([FromBody] ExcelExportModel excelExportModel)
         {
             try
