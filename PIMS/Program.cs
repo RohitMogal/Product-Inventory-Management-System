@@ -11,7 +11,14 @@ builder.Services.AddDbContext<MyDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionStrings")));
 builder.Services.AddScoped<IProducts, ProductsServices>();
 builder.Services.AddTransient<ExportExcel>();
+builder.Host.ConfigureLogging(LoggingProvider =>
+{
+    LoggingProvider.ClearProviders();
+    LoggingProvider.AddConsole();
+    LoggingProvider.AddDebug();
+    LoggingProvider.AddEventLog();
 
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

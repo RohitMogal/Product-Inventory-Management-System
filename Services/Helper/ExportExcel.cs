@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Services.Data;
 using ServicesContract.Model;
 using ServicesContracts.Model;
@@ -18,10 +19,12 @@ namespace Services.Helper
     public class ExportExcel
     {
         private readonly MyDBContext _myDBContext;
+        private readonly ILogger<ExportExcel> _logger;
 
-        public ExportExcel(MyDBContext myDBContext)
+        public ExportExcel(MyDBContext myDBContext,ILogger<ExportExcel> logger)
         {
             _myDBContext = myDBContext;
+            _logger = logger;
         }
 
 
@@ -30,12 +33,17 @@ namespace Services.Helper
         /// </summary>
         /// <param name="excelExportModel">The model containing export parameters.</param>
         /// <returns>A FileContentResult containing the exported Excel sheet.</returns>
-        public async Task<FileContentResult> ExportExcelHelper(ExcelExportModel excelExportModel)
+        public async Task<FileContentResult> ExportExcelHelperAsync(ExcelExportModel Category)
         
         {
             try
             {
-                var data = _myDBContext.sp_ExportExcelCategory(excelExportModel);
+                //For Browser
+                var data =await _myDBContext.ExportExcelCategoryAsync(Category);
+                //For PostMan
+                //var data = _myDBContext.sp_ExportExcelCategory(excelExportModel);
+
+
                 if (data != null && data.Count > 0)
                 {
                     using (XLWorkbook wb = new XLWorkbook())
@@ -56,11 +64,11 @@ namespace Services.Helper
             }
             catch (Exception ex)
             {
-
+                _logger.LogDebug("This is a debug message: ", ex.Message);
                 throw;
             }
         }
-
+    
 
         /// <summary>
         /// Converts a list of items to a DataTable.
@@ -90,3 +98,5 @@ namespace Services.Helper
         }
     }
 }
+
+

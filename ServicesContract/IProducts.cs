@@ -10,7 +10,7 @@ namespace ServicesContracts
         /// Retrieves all products.
         /// </summary>
         /// <returns>A list of all products.</returns>
-        public Task<List<ProductsModel>> GetProducts();
+        public Task<List<ProductsModel>> GetProductsAsync();
 
 
 
@@ -19,7 +19,7 @@ namespace ServicesContracts
         /// </summary>
         /// <param name="products">The product model to add.</param>
         /// <returns>True if the product is added successfully; otherwise, false.</returns>
-        public Task<bool> AddProducts(ProductsModel products);
+        public Task<bool> AddProductsAsync(ProductsModel products);
 
 
 
@@ -28,7 +28,7 @@ namespace ServicesContracts
         /// </summary>
         /// <param name="products">The updated product model.</param>
         /// <returns>True if the product is updated successfully; otherwise, false.</returns>
-        public Task<bool> UpdateProduct(ProductsModel products);
+        public Task<bool> UpdateProductAsync(ProductsModel products);
 
 
 
@@ -37,6 +37,6 @@ namespace ServicesContracts
         /// </summary>
         /// <param name="productId">The ID of the product to delete.</param>
         /// <returns>True if the product is deleted successfully; otherwise, false.</returns>
-        public Task<bool> DeleteProduct(int productId);
+        public Task<bool> DeleteProductAsync(int productId);
     }
 }

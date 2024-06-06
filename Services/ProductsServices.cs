@@ -22,12 +22,12 @@ namespace Services
         /// <param name="products">The product model to add.</param>
         /// <returns>Returns true if the product is added successfully.</returns>
         
-        public async Task<bool> AddProducts(ProductsModel products)
+        public async Task<bool> AddProductsAsync(ProductsModel products)
         {
             try
             {
 
-                var res = _myDBContext.sp_AddProduct(products);
+                var res =await _myDBContext.AddProduct1Async(products);
                 var res1 = await _myDBContext.SaveChangesAsync();
 
                 return true;
@@ -42,7 +42,7 @@ namespace Services
         /// <param name="productId">The ID of the product to delete.</param>
         /// <returns>Returns true if the product is deleted successfully; otherwise, false.</returns>
        
-        public async Task<bool> DeleteProduct(int productId)
+        public async Task<bool> DeleteProductAsync(int productId)
         {
             var product = await _myDBContext.Product.FindAsync(productId);
             if (product == null)
@@ -63,9 +63,9 @@ namespace Services
         /// </summary>
         /// <returns>Returns a list of all products.</returns>
         
-        public async Task<List<ProductsModel>> GetProducts()
+        public async Task<List<ProductsModel>> GetProductsAsync()
         {
-            List<ProductsModel> result = _myDBContext.sp_GetProducts();
+            List<ProductsModel> result =await _myDBContext.GetAllProducts1Async();
             return result;
         }
 
@@ -76,7 +76,7 @@ namespace Services
         /// <param name="updatedproducts">The updated product model.</param>
         /// <returns>Returns true if the product is updated successfully; otherwise, false.</returns>
         
-        public async Task<bool> UpdateProduct(ProductsModel updatedproducts)
+        public async Task<bool> UpdateProductAsync(ProductsModel updatedproducts)
         {
             var product = await _myDBContext.Product.FindAsync(updatedproducts.ProductID);
             if (product != null)

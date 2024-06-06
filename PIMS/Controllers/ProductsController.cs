@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Microsoft.AspNetCore.Mvc;
 using Services.Helper;
 using ServicesContract.Model;
 using ServicesContracts;
@@ -8,19 +9,21 @@ using System.Threading.Tasks;
 
 namespace Assignment_1.Controllers
 {
-    [Route("/products")]
+    [Route("products")]
     public class ProductsController : Controller
     {
         private readonly IProducts _products;
+        private readonly ILogger<ProductsController> _logger;
         private readonly ExportExcel _exportExcel;
 
-        public ProductsController(IProducts products, ExportExcel exportExcel)
+        public ProductsController(IProducts products, ExportExcel exportExcel, ILogger<ProductsController> logger)
         {
             _products = products;
             _exportExcel = exportExcel;
+            _logger = logger;
         }
 
-        [HttpGet("/")]
+        [HttpGet("")]
         public async Task<string> Home()
         {
             return "Hello World";
@@ -32,13 +35,13 @@ namespace Assignment_1.Controllers
         /// </summary>
         /// <param name="product">The model containing product details.</param>
         /// <returns>Returns the result of adding the product.</returns>
-       
+
         [HttpPost("add")]
         public async Task<IActionResult> AddProducts([FromBody] ProductsModel product)
         {
             try
             {
-                var result = await _products.AddProducts(product);
+                var result = await _products.AddProductsAsync(product);
                 if (result)
                 {
                     return Ok("Product added");
@@ -47,7 +50,8 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError($"This is a debug message: {ex.Message}");
+                return StatusCode(500, $"Internal server error");
             }
         }
 
@@ -56,18 +60,19 @@ namespace Assignment_1.Controllers
         /// Endpoint to retrieve all products.
         /// </summary>
         /// <returns>Returns the list of all products.</returns>
-       
+
         [HttpGet("getall")]
         public async Task<IActionResult> GetProducts()
         {
             try
             {
-                var result = await _products.GetProducts();
+                var result = await _products.GetProductsAsync();
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogDebug("This is a debug message: ",ex.Message);
+                return StatusCode(500, $"Internal server error");
             }
         }
 
@@ -77,23 +82,23 @@ namespace Assignment_1.Controllers
         /// </summary>
         /// <param name="productId">The ID of the product to delete.</param>
         /// <returns>Returns the result of deleting the product.</returns>
-        
+
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProduct([FromQuery] int productId)
         {
             try
             {
-                var result = await _products.DeleteProduct(productId);
+                var result = await _products.DeleteProductAsync(productId);
                 if (result)
                 {
-                    return Ok("Product deleted successfully");
+                    return StatusCode(204);
                 }
                 return NotFound("Product not found");
             }
             catch (Exception ex)
             {
-                // Log the exception (logging mechanism not shown here)
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                _logger.LogDebug("This is a debug message: ",ex.Message);
+                return StatusCode(500, $"Internal server error");
             }
         }
 
@@ -103,13 +108,14 @@ namespace Assignment_1.Controllers
         /// </summary>
         /// <param name="product">The model containing product details.</param>
         /// <returns>Returns the result of updating the product.</returns>
-        
-        [HttpPost("update")]
+
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductsModel product)
         {
             try
             {
-                var result = await _products.UpdateProduct(product);
+
+                var result = await _products.UpdateProductAsync(product);
                 if (result)
                 {
                     return Ok("Product updated successfully");
@@ -118,23 +124,51 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                _logger.LogDebug("This is a debug message: ",ex.Message);
+                return StatusCode(500, $"Internal server error");
             }
         }
 
-
+        //For PostMan*****************************************************************************
         /// <summary>
         /// Endpoint to create and download an Excel sheet of the database.
         /// </summary>
         /// <param name="excelExportModel">The model containing export parameters.</param>
         /// <returns>Returns the exported Excel sheet.</returns>
-        
-        [HttpPost("createExcel")]
-        public async Task<IActionResult> CreateExcelFile([FromBody] ExcelExportModel excelExportModel)
+        /// 
+        //[HttpPost("createExcel")]
+        //        public async Task<IActionResult> CreateExcelFile([FromBody] ExcelExportModel excelExportModel)
+
+        //        {
+        //            try
+        //            {
+        //                var fileContentResult = await _exportExcel.ExportExcelHelper(excelExportModel);
+        //                if (fileContentResult != null)
+        //                {
+        //                    return fileContentResult;
+        //                }
+        //                return NotFound("No data available to export.");
+        //}
+        //            catch (Exception ex)
+        //            {
+        //                return StatusCode(500, $"Internal server error: {ex.Message}");
+        //            }
+        //        }
+
+
+
+        //For Browser**********************************************************************
+        /// <summary>
+        /// Endpoint to create and download an Excel sheet of the database.
+        /// </summary>
+        /// <param name="excelExportModel">The model containing export parameters.</param>
+        /// <returns>Returns the exported Excel sheet.</returns>
+        [HttpGet("createExcel")]
+        public async Task<IActionResult> CreateExcelFile([FromQuery] ExcelExportModel excelExportModel)
         {
             try
             {
-                var fileContentResult = await _exportExcel.ExportExcelHelper(excelExportModel);
+                var fileContentResult = await _exportExcel.ExportExcelHelperAsync(excelExportModel);
                 if (fileContentResult != null)
                 {
                     return fileContentResult;
@@ -143,10 +177,10 @@ namespace Assignment_1.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                _logger.LogDebug("This is a debug message: ",ex.Message);
+                return StatusCode(500, $"Internal server error");
             }
         }
 
     }
 }
- 
